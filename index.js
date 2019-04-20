@@ -29,7 +29,7 @@ logger.info('Writing to file...');
 
 try {
   fs.writeFileSync('oss-license.md', result);
-  logger.info('Write successful. Licenses are written to oss-license.md');
+  logger.info(`Write successful (${result.length / 1000} kB). Licenses are written to oss-license.md`);
 } catch (error) {
   logger.error('An error has occured while writing to file:');
   logger.error(error);
