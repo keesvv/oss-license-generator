@@ -11,8 +11,8 @@ if (!appPath) {
   logger.error('The specified path does not exist.');
 }
 
-logger.info('Checking for node_modules...');
 const modulesPath = path.join(appPath, 'node_modules');
+logger.info('Checking for node_modules...');
 
 if (!fs.existsSync(modulesPath)) {
   logger.error('node_modules cannot be found.');
@@ -20,7 +20,6 @@ if (!fs.existsSync(modulesPath)) {
   logger.info('node_modules found, scanning...');
 }
 
-const entries = fs.readdirSync(modulesPath);
 const licenseFiles = crawler.crawl(appPath, 'LICENSE', 'LICENSE.md', 'LICENSE.MD');
 const licenseContent = crawler.mapLicenseContents(licenseFiles);
 
@@ -33,6 +32,11 @@ licenseContent.forEach((i) => {
 });
 
 logger.info('Writing to file...');
-fs.writeFileSync('oss-license.md', result);
 
-logger.info('Write successful. Licenses are written to oss-license.md');
+try {
+  fs.writeFileSync('oss-license.md', result);
+  logger.info('Write successful. Licenses are written to oss-license.md');
+} catch (error) {
+  logger.error('An error has occured while writing to file:');
+  logger.error(error);
+}
