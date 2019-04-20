@@ -22,15 +22,9 @@ if (!fs.existsSync(modulesPath)) {
 
 const licenseFiles = crawler.crawl(appPath, 'LICENSE', 'LICENSE.md', 'LICENSE.MD');
 const licenseContent = crawler.mapLicenseContents(licenseFiles);
+const result = crawler.parseContent(licenseContent);
 
 logger.info(`Found ${licenseFiles.length} license files.`);
-
-logger.info('Gathering results...');
-let result = '';
-licenseContent.forEach((i) => {
-  result += `## ${i.entry}\n\n${i.content}\n\n`;
-});
-
 logger.info('Writing to file...');
 
 try {
