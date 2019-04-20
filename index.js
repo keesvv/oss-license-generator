@@ -35,9 +35,10 @@ entries.forEach((entry) => {
   const licensePath = path.join(modulesPath, entry, 'LICENSE.md');
   if (fs.existsSync(licensePath)) {
     licenses.push({ entry, licensePath });
-    info(`Found ${licensePath}`);
   }
-})
+});
+
+info(`Found ${licenses.length} license files.`);
 
 licenses.forEach((license) => {
   const content = fs.readFileSync(license.licensePath, 'utf-8');
