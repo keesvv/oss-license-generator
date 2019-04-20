@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tribecamp/oss-license-generator/issues"
   },
-  "homepage": "https://github.com/tribecamp/oss-license-generator#readme"
+  "homepage": "https://github.com/tribecamp/oss-license-generator#readme",
+  "dependencies": {
+    "glob-fs": "^0.1.7"
+  }
 }
