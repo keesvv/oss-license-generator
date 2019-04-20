@@ -30,5 +30,13 @@ module.exports = {
         licenseContent
       };
     });
+  },
+  parseContent: (licenseContent) => {
+    let result = '';
+    licenseContent.forEach(license => {
+      result += `## ${license.module}\n\n${license.licenseContent}\n\n`;
+    });
+
+    return result;
   }
 };
