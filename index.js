@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('./logger');
+const crawler = require('./crawler');
 const args = process.argv.slice(2);
 const appPath = args[0];
 
@@ -20,22 +21,10 @@ if (!fs.existsSync(modulesPath)) {
 }
 
 const entries = fs.readdirSync(modulesPath);
-let licenses = [];
-let licenseContent = [];
+const licenseFiles = crawler.crawl(appPath, 'LICENSE', 'LICENSE.md', 'LICENSE.MD');
+const licenseContent = crawler.mapLicenseContents(licenseFiles);
 
-entries.forEach((entry) => {
-  const licensePath = path.join(modulesPath, entry, 'LICENSE.md');
-  if (fs.existsSync(licensePath)) {
-    licenses.push({ entry, licensePath });
-  }
-});
-
-logger.info(`Found ${licenses.length} license files.`);
-
-licenses.forEach((license) => {
-  const content = fs.readFileSync(license.licensePath, 'utf-8');
-  licenseContent.push({ entry: license.entry, content });
-});
+logger.info(`Found ${licenseFiles.length} license files.`);
 
 logger.info('Gathering results...');
 let result = '';
