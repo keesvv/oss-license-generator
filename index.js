@@ -1,30 +1,22 @@
 const fs = require('fs');
 const path = require('path');
+const logger = require('./logger');
 const args = process.argv.slice(2);
 const appPath = args[0];
 
-const info = (message) => {
-  console.info(`[i] ${message}`);
-}
-
-const error = (message) => {
-  console.error(`[!] ${message}`);
-  process.exit(1);
-}
-
 if (!appPath) {
-  error('Path to app is missing, please specify the app directory.');
+  logger.error('Path to app is missing, please specify the app directory.');
 } else if (!fs.existsSync(appPath)) {
-  error('The specified path does not exist.');
+  logger.error('The specified path does not exist.');
 }
 
-info('Checking for node_modules...');
+logger.info('Checking for node_modules...');
 const modulesPath = path.join(appPath, 'node_modules');
 
 if (!fs.existsSync(modulesPath)) {
-  error('node_modules cannot be found.');
+  logger.error('node_modules cannot be found.');
 } else {
-  info('node_modules found, scanning...');
+  logger.info('node_modules found, scanning...');
 }
 
 const entries = fs.readdirSync(modulesPath);
@@ -38,20 +30,20 @@ entries.forEach((entry) => {
   }
 });
 
-info(`Found ${licenses.length} license files.`);
+logger.info(`Found ${licenses.length} license files.`);
 
 licenses.forEach((license) => {
   const content = fs.readFileSync(license.licensePath, 'utf-8');
   licenseContent.push({ entry: license.entry, content });
 });
 
-info('Gathering results...');
+logger.info('Gathering results...');
 let result = '';
 licenseContent.forEach((i) => {
   result += `## ${i.entry}\n\n${i.content}\n\n`;
 });
 
-info('Writing to file...');
+logger.info('Writing to file...');
 fs.writeFileSync('oss-license.md', result);
 
-info('Write successful. Licenses are written to oss-license.md');
+logger.info('Write successful. Licenses are written to oss-license.md');
